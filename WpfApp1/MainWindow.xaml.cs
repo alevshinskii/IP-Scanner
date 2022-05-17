@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfApp1
+namespace App
 {
     public partial class MainWindow : Window
     {
@@ -24,6 +24,7 @@ namespace WpfApp1
         private bool _continueScan = true;
         private bool _showErrors = false;
         private string _welcomeText = " Welcome to IP Scanner!\r\n It's small program, that shows IP devices in your local network.\r\n Just paste mask in text box on the top and press 'scan'.\r\n For example, with mask '192.168.1.' program start to ping IPs in range from '192.168.1.0' to '192.168.1.255'\r\n Skipping more than 2 octets (like '...' or '192...') in mask may decrease performance of your device.";
+        
         public MainWindow()
         {
             InitializeComponent();
