@@ -1,19 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace lib
+namespace ScannerLib
 {
-
-    public class IpInterface
+    public interface INetInterface
     {
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+    }
+
+    public class Ipv4Interface : INetInterface
+    {
+        public string Ip { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string SubnetMask { get; set; }
+
+        public override string ToString()
+        {
+            return Ip + " (" + Name + " - " + Description + ")";
+        }
+    }
+    public class Ipv6Interface : INetInterface
+    {
+        public string Ip { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string LinkLocal { get; set; }
 
         public override string ToString()
         {
@@ -23,9 +39,9 @@ namespace lib
 
     public class InterfaceUtility
     {
-        public List<IpInterface> GetInterfaces()
+        public List<INetInterface> GetInterfaces()
         {
-            var list = new List<IpInterface>();
+            var list = new List<INetInterface>();
 
             // Get a list of all network interfaces (usually one per network card, dialup, and VPN connection)
             NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -41,22 +57,34 @@ namespace lib
                     !network.Description.ToLower().Contains("pseudo"))
                 {
                     // Each network interface may have multiple IP addresses
-                    foreach (IPAddressInformation addressInformation in properties.UnicastAddresses)
+                    foreach (UnicastIPAddressInformation addressInformation in properties.UnicastAddresses)
                     {
-                        // We're only interested in IPv4 addresses for now
-                        if (addressInformation.Address.AddressFamily != AddressFamily.InterNetwork)
-                            continue;
-
-                        // Ignore loopback addresses (e.g., 127.0.0.1)
+                        string ip = addressInformation.Address.ToString();
+                        // Ignore loopback addresses
                         if (IPAddress.IsLoopback(addressInformation.Address))
                             continue;
-
-                        list.Add(new IpInterface()
+                        // Ignore link-local
+                        if (addressInformation.Address.IsIPv6LinkLocal)
+                            continue;
+                        if (addressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            Ip=addressInformation.Address.ToString(),
-                            Name = network.Name,
-                            Description = network.Description
-                        });
+                            list.Add(new Ipv4Interface()
+                            {
+                                Ip = ip,
+                                Name = network.Name,
+                                Description = network.Description, 
+                                SubnetMask = addressInformation.IPv4Mask.ToString()
+                            });
+                        }
+                        else if (addressInformation.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                        {
+                            list.Add(new Ipv6Interface()
+                            {
+                                Ip = ip,
+                                Name = network.Name,
+                                Description = network.Description
+                            });
+                        }
                     }
                 }
             }

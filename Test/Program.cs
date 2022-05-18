@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using lib;
+using ScannerLib;
 
 namespace Test
 {
@@ -42,10 +43,12 @@ namespace Test
                 Console.WriteLine(ipInterface.ToString());
             }
 
-            foreach (var arpItem in new ArpUtil().GetArpResult())
-            {
-                Console.WriteLine(arpItem.ToString());
-            }
+            //foreach (var arpItem in new ArpUtil().GetArpResult())
+            //{
+            //    Console.WriteLine(arpItem.ToString());
+            //    Console.WriteLine(new PingUtil().GetPingResult(arpItem.Ip));
+            //}
+
 
         }
     }

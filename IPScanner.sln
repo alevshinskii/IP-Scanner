@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IP Scanner", "WpfApp1\IP Scanner.csproj", "{C0CD31BC-8075-4DC0-A863-A73C1C444248}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "WpfApp1\App.csproj", "{C0CD31BC-8075-4DC0-A863-A73C1C444248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib", "IPv4\lib.csproj", "{C6C779E1-B2B2-48C6-9C3C-BC27D2C3ED00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScannerLib", "IPv4\ScannerLib.csproj", "{C6C779E1-B2B2-48C6-9C3C-BC27D2C3ED00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{8FC8A1FE-15FA-44D7-94B2-36C624DA7287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{8FC8A1FE-15FA-44D7-94B2-36C624DA7287}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
