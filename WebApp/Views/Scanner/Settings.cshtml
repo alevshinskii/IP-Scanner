@@ -1,0 +1,30 @@
+﻿@using ScannerLib
+
+<div class="card text-center">
+    <div class="card-header">
+        Network Scanner Options
+    </div>
+    <div class="card-body">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Net Interface</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                @{
+                    var interfaces = (List<INetInterface>)ViewBag.Interfaces;
+                    int i = 1;
+                    foreach (var netInterface in interfaces)
+                    {
+                        <option value="@i++">@netInterface.ToString()</option>
+                    }
+                }
+            </select>
+        </div>
+
+    </div>
+</div>
+
+<div class="d-flex justify-content-end my-3">
+    <a class="btn btn-success mx-1" asp-controller="Scanner" asp-action="Index">Apply</a>
+    <a class="btn btn-outline-secondary mx-1" asp-controller="Scanner" asp-action="Index">Cancel</a>
+</div>

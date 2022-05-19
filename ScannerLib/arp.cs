@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace lib
+namespace ScannerLib
 {
     public class ArpItem
     {
@@ -22,9 +20,10 @@ namespace lib
     }
     public class ArpUtil
     {
-        public List<ArpItem> GetArpResult()
+        public void GetArpResult(INetInterface netInterface)
         {
-            using (Process process = Process.Start(new ProcessStartInfo("arp", "-a")
+            var devices = netInterface.Devices;
+            using (Process process = Process.Start(new ProcessStartInfo("arp", "-a -N "+netInterface.Ip)
                    {
                        CreateNoWindow = true,
                        UseShellExecute = false,
@@ -32,7 +31,25 @@ namespace lib
                    }))
             {
                 var output = process.StandardOutput.ReadToEnd();
-                return ParseArpResult(output);
+                var arpItems= ParseArpResult(output);
+                foreach (var arpItem in arpItems)
+                {
+                    if (devices.Any(d => d.MacAddress == arpItem.MacAddress))
+                    {
+                        foreach (var device in devices.Where(d=>d.MacAddress == arpItem.MacAddress))
+                        {
+                            if (device.IPv4 is null)
+                            {
+                                device.IPv4 = arpItem.Ip;
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        devices.Add(new Device(){IPv4 = arpItem.Ip,MacAddress = arpItem.MacAddress});
+                    }
+                }
             }
         }
 

@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IPv4\ScannerLib.csproj" />
+    <ProjectReference Include="..\ScannerLib\ScannerLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ScannerLib">
+      <HintPath>..\ScannerLib\bin\Debug\net6.0\ScannerLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

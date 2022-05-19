@@ -97,6 +97,11 @@
   <ItemGroup>
     <Resource Include="logo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ScannerLib\ScannerLib.csproj">
+      <Project>{f0d6cba8-6dbe-4783-8f78-89c502b0325b}</Project>
+      <Name>ScannerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

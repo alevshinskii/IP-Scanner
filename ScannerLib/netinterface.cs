@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace ScannerLib
 {
@@ -10,6 +11,7 @@ namespace ScannerLib
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public List<Device> Devices { get; set; }
     }
 
     public class Ipv4Interface : INetInterface
@@ -17,11 +19,12 @@ namespace ScannerLib
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public List<Device> Devices { get; set; }
         public string SubnetMask { get; set; }
 
         public override string ToString()
         {
-            return Ip + " (" + Name + " - " + Description + ")";
+            return "IP: " + Ip + " (" + Name + " - " + Description + ")";
         }
     }
     public class Ipv6Interface : INetInterface
@@ -29,11 +32,11 @@ namespace ScannerLib
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string LinkLocal { get; set; }
+        public List<Device> Devices { get; set; }
 
         public override string ToString()
         {
-            return Ip + " (" + Name + " - " + Description + ")";
+            return "IP: " + Ip + " (" + Name + " - " + Description + ")";
         }
     }
 
@@ -72,7 +75,7 @@ namespace ScannerLib
                             {
                                 Ip = ip,
                                 Name = network.Name,
-                                Description = network.Description, 
+                                Description = network.Description,
                                 SubnetMask = addressInformation.IPv4Mask.ToString()
                             });
                         }

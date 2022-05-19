@@ -10,11 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ScannerLib;
 
 namespace App
 {
     public partial class MainWindow : Window
     {
+        private InterfaceUtility interfaceUtility;
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +25,8 @@ namespace App
 
         private void PrepareWindow()
         {
-            
+
+            Interfaces.Items.Add();
         }
 
 

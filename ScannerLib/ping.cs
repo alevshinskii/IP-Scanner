@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace lib
+namespace ScannerLib
 {
     public class PingItem
     {
@@ -19,35 +20,23 @@ namespace lib
 
     public class PingUtil
     {
-        public string GetPingResult(string ip)
+        public async void GetPingResult(string ip)
         {
-            using (Process process = Process.Start(new ProcessStartInfo("ping", ip)
-                   {
-                       CreateNoWindow = true,
-                       UseShellExecute = false,
-                       RedirectStandardOutput = true
-                   }))
-            {
-                var output = process.StandardOutput.ReadToEnd();
-                return output;
-            }
+            Ping pingSender = new Ping ();
+            PingOptions options = new PingOptions ();
+
+            // Use the default Ttl value which is 128,
+            // but change the fragmentation behavior.
+            options.DontFragment = true;
+            options.Ttl = 256;
+
+            // Create a buffer of 32 bytes of data to be transmitted.
+            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            int timeout = 300;
+            PingReply reply = await pingSender.SendPingAsync(ip, timeout, buffer, options);
+            
         }
 
-        private List<PingItem> ParsePingResult(string output)
-        {
-            var lines = output.Split('\n');
-
-            var result = from line in lines
-                let item = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                where item.Count() == 4
-                select new PingItem()
-                {
-                    Ip = item[0],
-                    MacAddress = item[1],
-                    Type = item[2]
-                };
-
-            return result.ToList();
-        }
     }
 }

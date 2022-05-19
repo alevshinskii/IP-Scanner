@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using lib;
-using ScannerLib;
+﻿using ScannerLib;
 
 namespace Test
 {
@@ -38,10 +33,19 @@ namespace Test
             //}
             //Console.ReadLine();
 
+            
+
+
             foreach (var ipInterface in new InterfaceUtility().GetInterfaces())
             {
-                Console.WriteLine(ipInterface.ToString());
+                if(ipInterface is Ipv6Interface ipv6Interface)
+                    foreach (var item in new IPv6Utility().GetIPv6Result(ipv6Interface))
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
             }
+
+            Console.ReadKey();
 
             //foreach (var arpItem in new ArpUtil().GetArpResult())
             //{
