@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScannerLib", "ScannerLib\Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{62A6837D-480F-464A-A41A-0392BEC44E4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerLib", "LoggerLib\LoggerLib.csproj", "{254828CA-2A38-4F13-BB82-B2F228216B3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerLib", "LoggerLib\LoggerLib.csproj", "{254828CA-2A38-4F13-BB82-B2F228216B3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPAddressRange", "IPAddressRange\IPAddressRange.csproj", "{E9FF6B67-8DB9-4F39-8A38-B936CAED51F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceLib", "InterfaceLib\InterfaceLib.csproj", "{5B1A435A-807B-42BF-913F-8983833BD3AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{254828CA-2A38-4F13-BB82-B2F228216B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{254828CA-2A38-4F13-BB82-B2F228216B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{254828CA-2A38-4F13-BB82-B2F228216B3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9FF6B67-8DB9-4F39-8A38-B936CAED51F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9FF6B67-8DB9-4F39-8A38-B936CAED51F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9FF6B67-8DB9-4F39-8A38-B936CAED51F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9FF6B67-8DB9-4F39-8A38-B936CAED51F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B1A435A-807B-42BF-913F-8983833BD3AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B1A435A-807B-42BF-913F-8983833BD3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B1A435A-807B-42BF-913F-8983833BD3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B1A435A-807B-42BF-913F-8983833BD3AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

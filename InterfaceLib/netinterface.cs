@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
-namespace ScannerLib
+namespace InterfaceLib
 {
     public interface INetInterface
     {
@@ -19,12 +17,12 @@ namespace ScannerLib
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Device> Devices { get; set; }
+        public List<Device> Devices { get; set; } = new List<Device>();
         public string SubnetMask { get; set; }
 
         public override string ToString()
         {
-            return "IP: " + Ip + " (" + Name + " - " + Description + ")";
+            return "IP: " + Ip + " (" + Name + " - " + Description + ") Mask: " + SubnetMask;
         }
     }
     public class Ipv6Interface : INetInterface
@@ -32,7 +30,7 @@ namespace ScannerLib
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Device> Devices { get; set; }
+        public List<Device> Devices { get; set; } = new List<Device>();
 
         public override string ToString()
         {

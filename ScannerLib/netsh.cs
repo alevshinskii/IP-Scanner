@@ -41,10 +41,8 @@ namespace ScannerLib
 
             foreach (var line in lines)
             {
-                
+                throw new NotImplementedException();
             }
-
-
             return result;
         }
 

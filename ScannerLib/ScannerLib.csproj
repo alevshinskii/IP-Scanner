@@ -1,7 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InterfaceLib\InterfaceLib.csproj" />
+    <ProjectReference Include="..\IPAddressRange\IPAddressRange.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="IPAddressRange">
+      <HintPath>bin\Debug\net6.0\IPAddressRange.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
