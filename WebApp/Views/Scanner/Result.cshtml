@@ -1,0 +1,58 @@
+﻿@model IEnumerable<InterfaceLib.Device>
+
+@{
+    ViewData["Title"] = "Result";
+}
+
+<h4>Network Scan Result</h4>
+<h6>@ViewBag.Interface</h6>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IPv4)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IPv6)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MacAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hostname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ping)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IPv4)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IPv6)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MacAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hostname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ping)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

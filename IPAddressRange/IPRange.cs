@@ -57,7 +57,7 @@ namespace NetTools
 
 #if NET45
     [Serializable]
-    public class IPAddressRange : ISerializable, IEnumerable<IPAddress>, IReadOnlyDictionary<string, string>, IEquatable<IPAddressRange>
+    public class IPRange : ISerializable, IEnumerable<IPAddress>, IReadOnlyDictionary<string, string>, IEquatable<IPRange>
 #else
     public class IPAddressRange : IEnumerable<IPAddress>, IReadOnlyDictionary<string, string>, IEquatable<IPAddressRange>
 #endif
@@ -104,13 +104,13 @@ namespace NetTools
         /// <summary>
         /// Creates an empty range object, equivalent to "0.0.0.0/0".
         /// </summary>
-        public IPAddressRange() : this(new IPAddress(0L)) { }
+        public IPRange() : this(new IPAddress(0L)) { }
 
         /// <summary>
         /// Creates a new range with the same start/end address (range of one)
         /// </summary>
         /// <param name="singleAddress"></param>
-        public IPAddressRange(IPAddress singleAddress)
+        public IPRange(IPAddress singleAddress)
         {
             if (singleAddress == null)
                 throw new ArgumentNullException(nameof(singleAddress));
@@ -123,7 +123,7 @@ namespace NetTools
         /// Throws an exception if Begin comes after End, or the
         /// addresses are not in the same family.
         /// </summary>
-        public IPAddressRange(IPAddress begin, IPAddress end)
+        public IPRange(IPAddress begin, IPAddress end)
         {
             if (begin == null)
                 throw new ArgumentNullException(nameof(begin));
@@ -148,7 +148,7 @@ namespace NetTools
         /// </summary>
         /// <param name="baseAddress"></param>
         /// <param name="maskLength"></param>
-        public IPAddressRange(IPAddress baseAddress, int maskLength)
+        public IPRange(IPAddress baseAddress, int maskLength)
         {
             if (baseAddress == null)
                 throw new ArgumentNullException(nameof(baseAddress));
@@ -163,7 +163,7 @@ namespace NetTools
         }
 
         [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use IPAddressRange.Parse static method instead.")]
-        public IPAddressRange(string ipRangeString)
+        public IPRange(string ipRangeString)
         {
             var parsed = Parse(ipRangeString);
             Begin = parsed.Begin;
@@ -171,7 +171,7 @@ namespace NetTools
         }
 
 #if NET45
-        protected IPAddressRange(SerializationInfo info, StreamingContext context)
+        protected IPRange(SerializationInfo info, StreamingContext context)
         {
             var names = new List<string>();
             foreach (var item in info) names.Add(item.Name);
@@ -202,7 +202,7 @@ namespace NetTools
             return rangeOperator.Contains(ipaddress);
         }
 
-        public bool Contains(IPAddressRange range)
+        public bool Contains(IPRange range)
         {
             if (range == null) throw new ArgumentNullException(nameof(range));
 
@@ -211,7 +211,7 @@ namespace NetTools
             return rangeOperator.Contains(range);
         }
 
-        public static IPAddressRange Parse(string ipRangeString)
+        public static IPRange Parse(string ipRangeString)
         {
             if (ipRangeString == null) throw new ArgumentNullException(nameof(ipRangeString));
 
@@ -230,14 +230,14 @@ namespace NetTools
                 if (baseAdrBytes.Length * 8 < maskLen) throw new FormatException();
                 var maskBytes = Bits.GetBitMask(baseAdrBytes.Length, maskLen);
                 baseAdrBytes = Bits.And(baseAdrBytes, maskBytes);
-                return new IPAddressRange(new IPAddress(baseAdrBytes), new IPAddress(Bits.Or(baseAdrBytes, Bits.Not(maskBytes))));
+                return new IPRange(new IPAddress(baseAdrBytes), new IPAddress(Bits.Or(baseAdrBytes, Bits.Not(maskBytes))));
             }
 
             // Pattern 2. Uni address: "127.0.0.1", ":;1"
             var m2 = m2_regex.Match(ipRangeString);
             if (m2.Success)
             {
-                return new IPAddressRange(IPAddress.Parse(stripScopeId(ipRangeString)));
+                return new IPRange(IPAddress.Parse(stripScopeId(ipRangeString)));
             }
 
             // Pattern 3. Begin end range: "169.254.0.0-169.254.0.255"
@@ -255,7 +255,7 @@ namespace NetTools
                     end = begin.Substring(0, lastDotAt + 1) + end;
                 }
 
-                return new IPAddressRange(
+                return new IPRange(
                     begin: IPAddress.Parse(stripScopeId(begin)),
                     end: IPAddress.Parse(stripScopeId(end)));
             }
@@ -268,7 +268,7 @@ namespace NetTools
                 var maskBytes = IPAddress.Parse(m4.Groups["bitmask"].Value).GetAddressBytes();
                 ValidateSubnetMaskIsLinear(maskBytes);
                 baseAdrBytes = Bits.And(baseAdrBytes, maskBytes);
-                return new IPAddressRange(new IPAddress(baseAdrBytes), new IPAddress(Bits.Or(baseAdrBytes, Bits.Not(maskBytes))));
+                return new IPRange(new IPAddress(baseAdrBytes), new IPAddress(Bits.Or(baseAdrBytes, Bits.Not(maskBytes))));
             }
 
             throw new FormatException("Unknown IP range string.");
@@ -298,11 +298,11 @@ namespace NetTools
             }
         }
 
-        public static bool TryParse(string ipRangeString, out IPAddressRange ipRange)
+        public static bool TryParse(string ipRangeString, out IPRange ipRange)
         {
             try
             {
-                ipRange = IPAddressRange.Parse(ipRangeString);
+                ipRange = IPRange.Parse(ipRangeString);
                 return true;
             }
             catch (Exception)
@@ -348,7 +348,7 @@ namespace NetTools
             return Equals(Begin, End) ? Begin.ToString() : string.Format("{0}-{1}", Begin, End);
         }
 
-        public bool Equals(IPAddressRange other)
+        public bool Equals(IPRange other)
         {
             return other != null && Begin.Equals(other.Begin) && End.Equals(other.End);
         }
@@ -359,7 +359,7 @@ namespace NetTools
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
 
-            return Equals((IPAddressRange)obj);
+            return Equals((IPRange)obj);
         }
 
         public override int GetHashCode()
@@ -413,7 +413,7 @@ namespace NetTools
         #region JSON.NET Support by implement IReadOnlyDictionary<string, string>
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IPAddressRange(IEnumerable<KeyValuePair<string, string>> items)
+        public IPRange(IEnumerable<KeyValuePair<string, string>> items)
         {
             this.Begin = IPAddress.Parse(TryGetValue(items, nameof(Begin), out var value1) ? value1 : throw new KeyNotFoundException());
             this.End = IPAddress.Parse(TryGetValue(items, nameof(End), out var value2) ? value2 : throw new KeyNotFoundException());

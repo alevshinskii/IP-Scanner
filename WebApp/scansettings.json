@@ -1,0 +1,1 @@
+{"Interface":{"Ip":"192.168.1.2","IpVersion":4,"Name":"Ethernet","Description":"Realtek PCIe GBE Family Controller","Devices":[],"SubnetMask":"255.255.255.0"},"ScanType":1,"IPRangeBottom":"192.168.1.1","IPRangeTop":"192.168.1.255","Interval":5}

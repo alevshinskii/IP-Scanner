@@ -4,45 +4,36 @@ using System.Net.Sockets;
 
 namespace InterfaceLib
 {
-    public interface INetInterface
+    public class NetInterface
     {
         public string Ip { get; set; }
+        public int IpVersion { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Device> Devices { get; set; }
-    }
-
-    public class Ipv4Interface : INetInterface
-    {
-        public string Ip { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<Device> Devices { get; set; } = new List<Device>();
+        public List<Device> Devices { get; set; }=new List<Device>();
         public string SubnetMask { get; set; }
 
         public override string ToString()
         {
-            return "IP: " + Ip + " (" + Name + " - " + Description + ") Mask: " + SubnetMask;
+            if(IpVersion==4)
+                return "IP: " + Ip + " (" + Name + " - " + Description + ") Mask: " + SubnetMask;
+            else
+                return "IP: " + Ip + " (" + Name + " - " + Description + ")";
         }
     }
-    public class Ipv6Interface : INetInterface
-    {
-        public string Ip { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<Device> Devices { get; set; } = new List<Device>();
 
-        public override string ToString()
-        {
-            return "IP: " + Ip + " (" + Name + " - " + Description + ")";
-        }
-    }
 
     public class InterfaceUtility
     {
-        public List<INetInterface> GetInterfaces()
+        public List<NetInterface> Interfaces { get; }
+
+        public InterfaceUtility()
         {
-            var list = new List<INetInterface>();
+            Interfaces = GetInterfaces();
+        }
+        private List<NetInterface> GetInterfaces()
+        {
+            var list = new List<NetInterface>();
 
             // Get a list of all network interfaces (usually one per network card, dialup, and VPN connection)
             NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -69,23 +60,27 @@ namespace InterfaceLib
                             continue;
                         if (addressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            list.Add(new Ipv4Interface()
+                            list.Add(new NetInterface()
                             {
                                 Ip = ip,
+                                IpVersion = 4,
                                 Name = network.Name,
                                 Description = network.Description,
                                 SubnetMask = addressInformation.IPv4Mask.ToString()
                             });
                         }
-                        else if (addressInformation.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                        else
                         {
-                            list.Add(new Ipv6Interface()
+                            list.Add(new NetInterface()
                             {
                                 Ip = ip,
+                                IpVersion = 6,
                                 Name = network.Name,
-                                Description = network.Description
+                                Description = network.Description,
+                                SubnetMask = addressInformation.IPv4Mask.ToString()
                             });
                         }
+
                     }
                 }
             }

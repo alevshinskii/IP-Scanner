@@ -5,7 +5,7 @@ namespace NetTools.Internals
 {
     internal static class RangeOperatorFactory
     {
-        public static IRangeOperator Create(IPAddressRange range)
+        public static IRangeOperator Create(IPRange range)
         {
             if (range.Begin.AddressFamily != range.End.AddressFamily) throw new InvalidOperationException("Both Begin and End properties must be of the same address family");
 

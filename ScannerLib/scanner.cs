@@ -1,26 +1,36 @@
-﻿using System;
-using System.Collections;
+﻿using InterfaceLib;
+using NetTools;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using NetTools;
+using LoggerLib;
 
 namespace ScannerLib
 {
 
-    public interface IScanner
-    {
-        void StartScan();
-    }
-    public class IPv4Scanner:IScanner
+    public class NetScanner
     {
         private int oneTimePingLimit = 10;
         public ScannerSettings Settings { get; set; }
-        private PingUtil pingUtil = new PingUtil();
+        private PingUtil pingUtil;
+        private List<ILogger> loggers;
+
+        public NetScanner(List<ILogger> loggers)
+        {
+            pingUtil = new PingUtil();
+            this.loggers = loggers;
+        }
+
+        private void sendLogs(Log log)
+        {
+            foreach (var logger in loggers)
+            {
+                logger.SendLog(log);
+            }
+        }
 
         private async Task<List<Device>> PingAsync(IPAddressRange range)
         {
@@ -45,7 +55,7 @@ namespace ScannerLib
                 {
                     result.Add(new Device()
                     {
-                        IPv4 = reply.Address,
+                        IPv4 = reply.Address.ToString(),
                         Ping = reply.RoundtripTime
                     });
                 }
@@ -53,34 +63,36 @@ namespace ScannerLib
             return result;
         }
 
-        public void StartScan()
+        public bool StartScan()
         {
-            if (Settings.Interface is Ipv4Interface ipv4Interface)
+            NetInterface netInterface = Settings.Interface;
+            IPAddressRange range = new IPAddressRange(netInterface.Ip);
+            if (netInterface.IpVersion == 4)
             {
-                IPAddressRange range=new IPAddressRange();
-                if (Settings.ScanType == "Subnet")
+                if (Settings.ScanType is ScanTypes.Subnet)
                 {
-                    if (IPAddress.TryParse(ipv4Interface.Ip, out var ip)
-                        && IPAddress.TryParse(ipv4Interface.SubnetMask, out var subnet))
+                    if (IPAddress.TryParse(netInterface.Ip, out var ip)
+                        && IPAddress.TryParse(netInterface.SubnetMask, out var subnet))
                     {
                         var maskLength = IPAddressRange.SubnetMaskLength(subnet);
-                        range = new IPAddressRange(ip,maskLength);
+                        range = new IPAddressRange(ip, maskLength);
                     }
                 }
-                else if (Settings.ScanType == "Range")
+                else if (Settings.ScanType == ScanTypes.Range)
                 {
-                    if (IPAddress.TryParse(Settings.IPRangeBottom,out var bottom) 
+                    if (IPAddress.TryParse(Settings.IPRangeBottom, out var bottom)
                         && IPAddress.TryParse(Settings.IPRangeTop, out var top))
                     {
-                        range = new IPAddressRange(bottom,top);
+                        range = new IPAddressRange(bottom, top);
                     }
                 }
                 else
                 {
                     throw new NotImplementedException();
                 }
-                ipv4Interface.Devices.AddRange(PingAsync(range).Result);
-                foreach (var device in ipv4Interface.Devices)
+
+                netInterface.Devices.AddRange(PingAsync(range).Result);
+                foreach (var device in netInterface.Devices)
                 {
                     IPHostEntry entry = null;
                     try
@@ -99,7 +111,7 @@ namespace ScannerLib
                         {
                             if (address.AddressFamily == AddressFamily.InterNetworkV6)
                             {
-                                device.IPv6 = address;
+                                device.IPv6 = address.ToString();
                             }
                         }
                     }
@@ -107,24 +119,23 @@ namespace ScannerLib
             }
             else
             {
-                throw new ArgumentException();
+                return false;
             }
+
+            sendLogs(new Log(netInterface));
+            return true;
         }
     }
-    public class IPv6Scanner:IScanner
+
+    public enum ScanTypes:int
     {
-        public ScannerSettings Settings { get; set; }
-
-        public void StartScan()
-        {
-            throw new NotImplementedException();
-        }
+        Subnet=1,
+        Range=2
     }
-
     public class ScannerSettings
     {
-        public INetInterface Interface { get; set; }
-        public string ScanType { get; set; }
+        public NetInterface Interface { get; set; }
+        public ScanTypes ScanType { get; set; }
         public string IPRangeBottom { get; set; }
         public string IPRangeTop { get; set; }
         public int Interval { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using InterfaceLib;
 
 namespace ScannerLib
 {
@@ -21,7 +22,7 @@ namespace ScannerLib
     }
     public class ArpUtil
     {
-        public void GetArpResult(INetInterface netInterface)
+        public void GetArpResult(NetInterface netInterface)
         {
             var devices = netInterface.Devices;
             using (Process process = Process.Start(new ProcessStartInfo("arp", "-a -N " + netInterface.Ip)
@@ -41,14 +42,14 @@ namespace ScannerLib
                         {
                             if (device.IPv4 is null)
                             {
-                                device.IPv4 = arpItem.Ip;
+                                device.IPv4 = arpItem.Ip.ToString();
                             }
                         }
 
                     }
                     else
                     {
-                        devices.Add(new Device() { IPv4 = arpItem.Ip, MacAddress = arpItem.MacAddress });
+                        devices.Add(new Device() { IPv4 = arpItem.Ip.ToString(), MacAddress = arpItem.MacAddress });
                     }
                 }
             }

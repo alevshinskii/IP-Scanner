@@ -10,9 +10,9 @@ namespace InterfaceLib
             Hostname = "???";
             Ping = -1;
         }
-        public IPAddress IPv4 { get; set; }
+        public string IPv4 { get; set; }
 
-        public IPAddress IPv6 { get; set; }
+        public string IPv6 { get; set; }
 
         public string MacAddress { get; set; }
 

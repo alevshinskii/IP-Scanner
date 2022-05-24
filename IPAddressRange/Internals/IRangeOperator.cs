@@ -5,6 +5,6 @@ namespace NetTools.Internals
 {
     internal interface IRangeOperator : ICollection<IPAddress>
     {
-        bool Contains(IPAddressRange range);
+        bool Contains(IPRange range);
     }
 }

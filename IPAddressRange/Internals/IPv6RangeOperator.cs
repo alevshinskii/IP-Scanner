@@ -12,7 +12,7 @@ namespace NetTools.Internals
 
         private BigInteger End { get; }
 
-        public IPv6RangeOperator(IPAddressRange range)
+        public IPv6RangeOperator(IPRange range)
         {
             Begin = range.Begin.ToBigInteger();
             End = range.End.ToBigInteger();
@@ -24,7 +24,7 @@ namespace NetTools.Internals
             return Begin <= address && address <= End;
         }
 
-        public bool Contains(IPAddressRange range)
+        public bool Contains(IPRange range)
         {
             var rangeBegin = range.Begin.ToBigInteger();
             var rangeEnd = range.End.ToBigInteger();

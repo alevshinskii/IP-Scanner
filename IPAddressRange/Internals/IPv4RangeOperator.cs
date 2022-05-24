@@ -11,7 +11,7 @@ namespace NetTools.Internals
 
         private UInt32 End { get; }
 
-        public IPv4RangeOperator(IPAddressRange range)
+        public IPv4RangeOperator(IPRange range)
         {
             Begin = range.Begin.ToUInt32();
             End = range.End.ToUInt32();
@@ -23,7 +23,7 @@ namespace NetTools.Internals
             return Begin <= address && address <= End;
         }
 
-        public bool Contains(IPAddressRange range)
+        public bool Contains(IPRange range)
         {
             var rangeBegin = range.Begin.ToUInt32();
             var rangeEnd = range.End.ToUInt32();

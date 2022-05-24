@@ -1,3 +1,10 @@
+using System.Text.Json;
+using LoggerLib;
+using ScannerLib;
+using ILogger = LoggerLib.ILogger;
+
+StartScanService();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,3 +32,27 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void StartScanService()
+{
+    var scanner = new NetScanner(new List<ILogger>(){new LocalLogger(new KuznechikCypher())});
+    try
+    {
+        using (FileStream fs = new FileStream("scansettings.json", FileMode.OpenOrCreate))
+        {
+            scanner.Settings = JsonSerializer.Deserialize<ScannerSettings>(fs);
+        }
+    }
+    catch
+    {
+        //settings not found
+    }
+
+    if (scanner.Settings != null)
+        Task.Run(() => { autoscanStart(scanner); });
+}
+
+void autoscanStart(NetScanner scanner)
+{
+    
+}

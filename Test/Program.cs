@@ -1,4 +1,8 @@
-﻿using ScannerLib;
+﻿using System.Text;
+using System.Text.Json;
+using InterfaceLib;
+using LoggerLib;
+using ScannerLib;
 
 namespace Test
 {
@@ -6,31 +10,35 @@ namespace Test
     {
         static void Main(string[] args)
         {
-
-            foreach (var ipInterface in new InterfaceUtility().GetInterfaces())
+            KuznechikCypher cypher = new KuznechikCypher();
+            NetScanner scanner;
+            LocalLogger logger = new LocalLogger(cypher);
+            string serialized = "";
+            foreach (var netInterface in new InterfaceUtility().Interfaces)
             {
-                if (ipInterface is Ipv4Interface ipv4Interface && ipv4Interface.Name == "Ethernet")
+                if (netInterface.Name == "Ethernet" && netInterface.IpVersion == 4)
                 {
-                    IPv4Scanner scanner= new IPv4Scanner();
+                    scanner = new NetScanner(new List<ILogger>() { logger });
                     scanner.Settings = new ScannerSettings()
-                        { Interface = ipv4Interface, ScanType = "Subnet"};
+                    { Interface = netInterface, ScanType = ScanTypes.Subnet };
                     scanner.StartScan();
-                    foreach (var device in ipv4Interface.Devices)
+                    foreach (var device in netInterface.Devices)
                     {
                         Console.WriteLine(device.ToString());
                     }
+
+
                 }
-
-
             }
 
 
+            foreach (var log in logger.RecieveLogs())
+            {
+                Console.WriteLine(log.ToString());
+            }
+
 
             Console.ReadKey();
-
-
-
-
         }
     }
 }

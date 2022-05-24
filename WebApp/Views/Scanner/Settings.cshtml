@@ -1,30 +1,67 @@
 ﻿@using ScannerLib
+@using InterfaceLib
 
 <div class="card text-center">
     <div class="card-header">
         Network Scanner Options
     </div>
     <div class="card-body">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Net Interface</label>
-            </div>
-            <select class="custom-select" id="inputGroupSelect01">
-                @{
-                    var interfaces = (List<INetInterface>)ViewBag.Interfaces;
-                    int i = 1;
-                    foreach (var netInterface in interfaces)
-                    {
-                        <option value="@i++">@netInterface.ToString()</option>
+        <form method="post">
+            <div class="input-group mb-3 row">
+                <div class="input-group-prepend col-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Net Interface</label>
+                </div>
+                <select name="netInterface" class="custom-select col-9" id="inputGroupSelect01">
+                    @{
+                        var interfaces = (List<NetInterface>)ViewBag.Interfaces;
+                        int i = 0;
+                        foreach (var netInterface in interfaces)
+                        {
+                            <option value="@netInterface.Ip">@netInterface.ToString()</option>
+                            i++;
+                        }
                     }
-                }
-            </select>
-        </div>
-
+                </select>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="input-group-prepend col-3">
+                    <label class="input-group-text" for="inputGroupSelect02">Scan Type</label>
+                </div>
+                <select name="scanType" class="custom-select col-9" id="inputGroupSelect02">
+                    @{
+                        var scanTypes = (List<string>)ViewBag.ScanTypes;
+                        i = 0;
+                        foreach (var type in scanTypes)
+                        {
+                            <option value="@type">@type</option>
+                            i++;
+                        }
+                    }
+                </select>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="input-group-prepend col-3">
+                    <label class="input-group-text">IP Range</label>
+                </div>
+                <div class="col-9">
+                    <input name="iprangebottom" class="custom-input mx-1" type="text" value="192.168.1.1"/>
+                    -
+                    <input name="iprangetop" class="custom-input mx-1" type="text" value="192.168.1.255"/>
+                </div>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="input-group-prepend col-5">
+                    <label class="input-group-text">Autoscan Interval(min)</label>
+                </div>
+                <div class="col-5">
+                    <input name="interval" class="custom-input mx-1" type="text" value="5"/>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end my-3">
+                <button type="submit" class="btn btn-success mx-1">Apply</button>
+                <button class="btn btn-outline-secondary mx-1" asp-controller="Scanner" asp-action="Index">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
-<div class="d-flex justify-content-end my-3">
-    <a class="btn btn-success mx-1" asp-controller="Scanner" asp-action="Index">Apply</a>
-    <a class="btn btn-outline-secondary mx-1" asp-controller="Scanner" asp-action="Index">Cancel</a>
-</div>

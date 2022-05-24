@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using InterfaceLib;
 
 namespace ScannerLib
 {
@@ -19,7 +20,7 @@ namespace ScannerLib
 
     public class IPv6Utility
     {
-        public List<IPv6Item> GetIPv6Result(Ipv6Interface netInterface)
+        public List<IPv6Item> GetIPv6Result(NetInterface netInterface)
         {
             using (Process process = Process.Start(new ProcessStartInfo("netsh", "interface ipv6 show neighbors interface='"+netInterface.Name+"'")
                    {

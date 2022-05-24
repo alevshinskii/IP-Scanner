@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,10 +10,18 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IPAddressRange\IPAddressRange.csproj" />
     <ProjectReference Include="..\ScannerLib\ScannerLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="IPAddressRange">
+      <HintPath>..\ScannerLib\bin\Debug\net6.0\IPAddressRange.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

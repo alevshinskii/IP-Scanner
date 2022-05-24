@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InterfaceLib\InterfaceLib.csproj" />
     <ProjectReference Include="..\IPv4\ScannerLib.csproj" />
+    <ProjectReference Include="..\LoggerLib\LoggerLib.csproj" />
     <ProjectReference Include="..\ScannerLib\ScannerLib.csproj" />
   </ItemGroup>
 
